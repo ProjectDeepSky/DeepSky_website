@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeepSky — Personalized Genomic Intelligence</title>
+<meta name="description" content="DeepSky delivers personalized variant effect prediction, interpreting genetic variants in the context of each patient's full genome for precision medicine at scale.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   CSS CUSTOM PROPERTIES
+   ═══════════════════════════════════════════ */
+:root {
+  --bg-deep: #06090f;
+  --bg-primary: #0a0e1a;
+  --bg-elevated: #0f1524;
+  --bg-card: #111827;
+  --bg-card-hover: #162035;
+
+  --gold-primary: #c9a84c;
+  --gold-light: #e8d48b;
+  --gold-bright: #f0d864;
+  --gold-dim: #8a7434;
+  --gold-glow: rgba(201, 168, 76, 0.15);
+  --gold-glow-strong: rgba(201, 168, 76, 0.35);
+
+  --blue-accent: #4a6fa5;
+  --blue-dim: #2a3f65;
+  --blue-glow: rgba(74, 111, 165, 0.2);
+
+  --text-primary: #e8e4dc;
+  --text-secondary: #9ca3af;
+  --text-dim: #6b7280;
+  --text-bright: #f5f3ef;
+
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Outfit', sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold-dim) var(--bg-deep);
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--gold-primary);
+  color: var(--bg-deep);
+}
+
+a { color: var(--gold-primary); text-decoration: none; transition: color 0.3s; }
+a:hover { color: var(--gold-light); }
+
+/* ═══════════════════════════════════════════
+   CANVAS STARFIELD
+   ═══════════════════════════════════════════ */
+#starfield {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1.25rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.5s var(--ease-out-expo);
+  background: transparent;
+}
+
+.nav.scrolled {
+  background: rgba(6, 9, 15, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.08);
+  padding: 0.8rem 3rem;
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+}
+
+.nav-logo span {
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1px;
+  background: var(--gold-primary);
+  transition: width 0.4s var(--ease-out-expo);
+}
+
+.nav-links a:hover { color: var(--gold-light); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-cta {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.6rem;
+  border: 1px solid var(--gold-primary);
+  color: var(--gold-primary);
+  border-radius: 2px;
+  transition: all 0.4s var(--ease-out-expo);
+}
+
+.nav-cta:hover {
+  background: var(--gold-primary);
+  color: var(--bg-deep);
+}
+
+.mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  z-index: 101;
+  background: none;
+  border: none;
+}
+.mobile-toggle span {
+  width: 24px; height: 1.5px;
+  background: var(--gold-primary);
+  transition: all 0.3s;
+  display: block;
+}
+
+/* ═══════════════════════════════════════════
+   SHARED SECTION STYLES
+   ═══════════════════════════════════════════ */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+.section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 8rem 2rem;
+}
+
+.section-label {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold-primary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.section-label::before {
+  content: '';
+  width: 40px; height: 1px;
+  background: var(--gold-dim);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--text-bright);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+.section-subtitle {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 680px;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* Reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ═══════════════════════════════════════════
+   HERO SECTION
+   ═══════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 2rem;
+}
+
+/* Armillary Sphere Animation */
+.armillary {
+  position: relative;
+  width: 280px; height: 280px;
+  margin: 0 auto 3rem;
+  perspective: 800px;
+}
+
+.armillary-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  border: 1.5px solid;
+  border-radius: 50%;
+  transform-style: preserve-3d;
+}
+
+.ring-1 {
+  width: 240px; height: 240px;
+  margin: -120px 0 0 -120px;
+  border-color: rgba(201, 168, 76, 0.6);
+  animation: orbit1 12s linear infinite;
+}
+.ring-2 {
+  width: 200px; height: 200px;
+  margin: -100px 0 0 -100px;
+  border-color: rgba(201, 168, 76, 0.4);
+  animation: orbit2 18s linear infinite;
+}
+.ring-3 {
+  width: 260px; height: 260px;
+  margin: -130px 0 0 -130px;
+  border-color: rgba(201, 168, 76, 0.25);
+  animation: orbit3 25s linear infinite;
+}
+.ring-4 {
+  width: 170px; height: 170px;
+  margin: -85px 0 0 -85px;
+  border-color: rgba(74, 111, 165, 0.35);
+  animation: orbit4 15s linear infinite;
+}
+
+@keyframes orbit1 { from { transform: rotateX(70deg) rotateY(0deg); } to { transform: rotateX(70deg) rotateY(360deg); } }
+@keyframes orbit2 { from { transform: rotateX(30deg) rotateZ(0deg); } to { transform: rotateX(30deg) rotateZ(360deg); } }
+@keyframes orbit3 { from { transform: rotateY(60deg) rotateZ(0deg); } to { transform: rotateY(60deg) rotateZ(360deg); } }
+@keyframes orbit4 { from { transform: rotateX(50deg) rotateY(0deg) rotateZ(45deg); } to { transform: rotateX(50deg) rotateY(360deg) rotateZ(45deg); } }
+
+.armillary-core {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 18px; height: 18px;
+  margin: -9px 0 0 -9px;
+  background: var(--gold-primary);
+  border-radius: 50%;
+  box-shadow:
+    0 0 20px var(--gold-glow-strong),
+    0 0 60px var(--gold-glow),
+    0 0 100px rgba(201, 168, 76, 0.08);
+  animation: corePulse 3s ease-in-out infinite;
+}
+
+@keyframes corePulse {
+  0%, 100% { box-shadow: 0 0 20px var(--gold-glow-strong), 0 0 60px var(--gold-glow); transform: scale(1); }
+  50% { box-shadow: 0 0 30px var(--gold-glow-strong), 0 0 80px var(--gold-glow), 0 0 120px rgba(201, 168, 76, 0.06); transform: scale(1.15); }
+}
+
+/* DNA Helix overlay on armillary */
+.dna-strand {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px; height: 200px;
+}
+
+.dna-dot {
+  position: absolute;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--gold-light);
+}
+
+@keyframes dnaFloat {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.4); }
+}
+
+.hero-overline {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin-bottom: 1rem;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-bright);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.hero-title .gold { color: var(--gold-primary); }
+
+.hero-tagline {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: 0.06em;
+  margin-bottom: 2.5rem;
+}
+
+.hero-description {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.hero-cta-group {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2.4rem;
+  background: var(--gold-primary);
+  color: var(--bg-deep);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out-expo);
+}
+
+.btn-primary:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(201, 168, 76, 0.25);
+  color: var(--bg-deep);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2.4rem;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid var(--text-dim);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out-expo);
+}
+
+.btn-secondary:hover {
+  border-color: var(--gold-primary);
+  color: var(--gold-primary);
+  transform: translateY(-2px);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+.scroll-indicator span {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ═══════════════════════════════════════════
+   CRISIS SECTION
+   ═══════════════════════════════════════════ */
+.crisis {
+  background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-primary) 100%);
+}
+
+.crisis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-top: 4rem;
+}
+
+.crisis-visual {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.crisis-number {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 9vw, 7rem);
+  font-weight: 700;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--gold-dim);
+  line-height: 1;
+  position: relative;
+}
+
+.crisis-number .filled {
+  position: absolute;
+  top: 0; left: 0;
+  color: var(--gold-primary);
+  -webkit-text-stroke: 0;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.5s var(--ease-out-expo);
+}
+
+.crisis-number.animate .filled {
+  clip-path: inset(0 0% 0 0);
+}
+
+.crisis-unit {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--gold-dim);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+.crisis-text h3 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--text-bright);
+  margin-bottom: 1.2rem;
+  line-height: 1.35;
+}
+
+.crisis-text p {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+  margin-bottom: 1.5rem;
+}
+
+.stat-row {
+  display: flex;
+  gap: 3rem;
+  margin-top: 2.5rem;
+}
+
+.stat-item { display: flex; flex-direction: column; }
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--gold-primary);
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  margin-top: 0.3rem;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════
+   PARADIGM SHIFT SECTION
+   ═══════════════════════════════════════════ */
+.paradigm {
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+
+.paradigm-comparison {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  margin-top: 4rem;
+  align-items: stretch;
+}
+
+.paradigm-card {
+  padding: 3rem;
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+
+.paradigm-card:hover { transform: translateY(-4px); }
+
+.paradigm-card.old {
+  background: var(--bg-card);
+  border: 1px solid rgba(107, 114, 128, 0.15);
+}
+
+.paradigm-card.new {
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.06), rgba(201, 168, 76, 0.02));
+  border: 1px solid rgba(201, 168, 76, 0.2);
+}
+
+.paradigm-card.new::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+}
+
+.paradigm-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2rem;
+}
+
+.paradigm-divider span {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  writing-mode: vertical-rl;
+}
+
+.paradigm-icon { font-size: 2.5rem; margin-bottom: 1.5rem; }
+
+.paradigm-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.04em;
+}
+
+.paradigm-card.old h3 { color: var(--text-secondary); }
+.paradigm-card.new h3 { color: var(--gold-primary); }
+
+.paradigm-card .model-name {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 1.5rem;
+}
+
+.paradigm-card p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+.paradigm-features {
+  list-style: none;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.paradigm-features li {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  line-height: 1.5;
+}
+
+.paradigm-features li .icon {
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  margin-top: 2px;
+}
+
+.old .paradigm-features li .icon {
+  background: rgba(107, 114, 128, 0.2);
+  color: var(--text-dim);
+}
+
+.new .paradigm-features li .icon {
+  background: rgba(201, 168, 76, 0.15);
+  color: var(--gold-primary);
+}
+
+/* ═══════════════════════════════════════════
+   SCIENCE SECTION
+   ═══════════════════════════════════════════ */
+.science {
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-deep) 100%);
+}
+
+.science-highlight {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+}
+
+.science-card {
+  padding: 2.5rem;
+  background: var(--bg-card);
+  border: 1px solid rgba(201, 168, 76, 0.08);
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s var(--ease-out-expo);
+}
+
+.science-card:hover {
+  border-color: rgba(201, 168, 76, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.science-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(ellipse at top left, var(--gold-glow), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.science-card:hover::before { opacity: 1; }
+
+.science-card-number {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--gold-primary);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.science-card-number .suffix {
+  font-size: 1.8rem;
+  color: var(--gold-dim);
+}
+
+.science-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-bright);
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.03em;
+  position: relative;
+}
+
+.science-card p {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  position: relative;
+}
+
+/* ═══════════════════════════════════════════
+   PLATFORM SECTION
+   ═══════════════════════════════════════════ */
+.platform {
+  background: var(--bg-deep);
+}
+
+.platform-flow {
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.platform-flow::before {
+  content: '';
+  position: absolute;
+  left: 40px;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--gold-dim), var(--gold-dim), transparent);
+}
+
+.platform-step {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 2rem;
+  padding: 2.5rem 0;
+  position: relative;
+}
+
+.step-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-number {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gold-primary);
+  background: var(--bg-deep);
+  position: relative;
+  z-index: 2;
+  transition: all 0.4s;
+}
+
+.platform-step:hover .step-number {
+  background: var(--gold-primary);
+  color: var(--bg-deep);
+  box-shadow: 0 0 25px var(--gold-glow);
+}
+
+.step-content h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--text-bright);
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.03em;
+}
+
+.step-content p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  max-width: 600px;
+}
+
+.step-tag {
+  display: inline-block;
+  margin-top: 0.8rem;
+  padding: 0.3rem 0.9rem;
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  border-radius: 2px;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-primary);
+}
+
+/* ═══════════════════════════════════════════
+   BABY KJ — NARRATIVE SECTION
+   ═══════════════════════════════════════════ */
+.narrative {
+  background: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.narrative::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(201, 168, 76, 0.04), transparent 70%);
+  pointer-events: none;
+}
+
+.narrative-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.narrative-quote {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.55;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.narrative-quote::before {
+  content: '"';
+  font-size: 4rem;
+  color: var(--gold-dim);
+  position: absolute;
+  top: -1.5rem; left: -0.5rem;
+  font-family: var(--font-display);
+  line-height: 1;
+}
+
+.narrative-attribution {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.narrative-body {
+  margin-top: 3rem;
+  text-align: left;
+}
+
+.narrative-body p {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+  margin-bottom: 1.5rem;
+}
+
+.narrative-emphasis {
+  color: var(--gold-primary);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════
+   MARKET SECTION
+   ═══════════════════════════════════════════ */
+.market {
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-deep) 100%);
+}
+
+.market-grid {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+.market-metric {
+  padding: 3rem;
+  background: var(--bg-card);
+  border: 1px solid rgba(201, 168, 76, 0.06);
+  border-radius: 3px;
+  transition: all 0.4s var(--ease-out-expo);
+}
+
+.market-metric:hover {
+  border-color: rgba(201, 168, 76, 0.15);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.market-metric-value {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--gold-primary);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.market-metric-label {
+  font-size: 1rem;
+  color: var(--text-bright);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.market-metric-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.market-bar {
+  margin-top: 1.5rem;
+  height: 3px;
+  background: rgba(201, 168, 76, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.market-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-primary), var(--gold-light));
+  border-radius: 2px;
+  width: 0;
+  transition: width 1.5s var(--ease-out-expo);
+}
+
+.market-metric.visible .market-bar-fill { width: var(--fill-width, 75%); }
+
+/* ═══════════════════════════════════════════
+   STAKEHOLDERS SECTION
+   ═══════════════════════════════════════════ */
+.stakeholders {
+  background: var(--bg-deep);
+}
+
+.stakeholder-tabs {
+  display: flex;
+  gap: 0;
+  margin-top: 4rem;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+}
+
+.stakeholder-tab {
+  padding: 1rem 2rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.stakeholder-tab:hover { color: var(--text-secondary); }
+
+.stakeholder-tab.active { color: var(--gold-primary); }
+
+.stakeholder-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 2px;
+  background: var(--gold-primary);
+}
+
+.stakeholder-panels { margin-top: 3rem; }
+
+.stakeholder-panel {
+  display: none;
+  animation: fadeInPanel 0.5s var(--ease-out-expo);
+}
+
+.stakeholder-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+
+@keyframes fadeInPanel {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.panel-text h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--text-bright);
+  margin-bottom: 1rem;
+  letter-spacing: 0.03em;
+}
+
+.panel-text p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+  margin-bottom: 1.5rem;
+}
+
+.panel-benefits {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.panel-benefits li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.panel-benefits li::before {
+  content: '→';
+  color: var(--gold-primary);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.panel-visual { display: flex; flex-direction: column; gap: 1rem; }
+
+.panel-logo-row { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+.panel-logo-item {
+  padding: 0.8rem 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid rgba(201, 168, 76, 0.08);
+  border-radius: 3px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.panel-logo-item:hover {
+  border-color: rgba(201, 168, 76, 0.2);
+  color: var(--gold-light);
+}
+
+/* ═══════════════════════════════════════════
+   ORIGIN SECTION
+   ═══════════════════════════════════════════ */
+.origin {
+  background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-primary) 100%);
+}
+
+.origin-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-top: 4rem;
+}
+
+.origin-text p {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+  margin-bottom: 1.5rem;
+}
+
+.origin-text p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  float: left;
+  line-height: 1;
+  margin-right: 0.4rem;
+  color: var(--gold-primary);
+  font-weight: 600;
+}
+
+.origin-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.origin-badge {
+  padding: 2rem;
+  background: var(--bg-card);
+  border: 1px solid rgba(201, 168, 76, 0.08);
+  border-radius: 3px;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  transition: all 0.4s;
+}
+
+.origin-badge:hover {
+  border-color: rgba(201, 168, 76, 0.15);
+  transform: translateX(4px);
+}
+
+.badge-icon { font-size: 1.8rem; flex-shrink: 0; }
+
+.badge-text h4 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-bright);
+  margin-bottom: 0.3rem;
+  letter-spacing: 0.03em;
+}
+
+.badge-text p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════
+   CONTACT / CTA SECTION
+   ═══════════════════════════════════════════ */
+.contact {
+  background: var(--bg-primary);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, var(--gold-glow), transparent 70%);
+  pointer-events: none;
+}
+
+.contact .section-inner { position: relative; z-index: 2; }
+
+.contact .section-title { max-width: 700px; margin: 0 auto 1rem; }
+
+.contact .section-subtitle { margin: 0 auto 3rem; text-align: center; }
+
+.contact-email {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  color: var(--gold-primary);
+  letter-spacing: 0.05em;
+  display: inline-block;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.3);
+  transition: all 0.3s;
+  margin-bottom: 3rem;
+}
+
+.contact-email:hover {
+  color: var(--gold-light);
+  border-color: var(--gold-light);
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════ */
+.footer {
+  position: relative;
+  z-index: 1;
+  padding: 2.5rem 3rem;
+  border-top: 1px solid rgba(201, 168, 76, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-deep);
+}
+
+.footer-left {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+}
+
+.footer-right {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+
+/* ═══════════════════════════════════════════
+   SEPARATOR
+   ═══════════════════════════════════════════ */
+.gold-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  margin: 0 auto;
+  max-width: 300px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .paradigm-comparison { grid-template-columns: 1fr; gap: 2rem; }
+  .paradigm-divider { padding: 1rem 0; }
+  .paradigm-divider span { writing-mode: horizontal-tb; }
+  .science-highlight { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav.scrolled { padding: 0.6rem 1.5rem; }
+  .nav-links { display: none; }
+  .nav-cta { display: none; }
+  .mobile-toggle { display: flex; }
+
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(6, 9, 15, 0.97);
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    z-index: 100;
+  }
+
+  .nav-links.open a { font-size: 1.2rem; }
+
+  .section-inner { padding: 5rem 1.5rem; }
+  .crisis-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .market-grid { grid-template-columns: 1fr; }
+  .stakeholder-panel.active { grid-template-columns: 1fr; }
+  .origin-content { grid-template-columns: 1fr; }
+  .stat-row { gap: 1.5rem; flex-wrap: wrap; }
+  .stakeholder-tabs { overflow-x: auto; white-space: nowrap; }
+  .footer { flex-direction: column; gap: 1rem; text-align: center; }
+
+  .armillary { width: 200px; height: 200px; }
+  .ring-1 { width: 170px; height: 170px; margin: -85px 0 0 -85px; }
+  .ring-2 { width: 140px; height: 140px; margin: -70px 0 0 -70px; }
+  .ring-3 { width: 185px; height: 185px; margin: -92.5px 0 0 -92.5px; }
+  .ring-4 { width: 120px; height: 120px; margin: -60px 0 0 -60px; }
+
+  .hero-cta-group { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- STARFIELD CANVAS -->
+<canvas id="starfield"></canvas>
+
+<!-- NAVIGATION -->
+<nav class="nav" id="nav">
+  <div class="nav-logo">Deep<span>Sky</span></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#crisis">The Crisis</a></li>
+    <li><a href="#paradigm">Our Approach</a></li>
+    <li><a href="#science">Science</a></li>
+    <li><a href="#platform">Platform</a></li>
+    <li><a href="#market">Market</a></li>
+    <li><a href="#stakeholders">Stakeholders</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get in Touch</a>
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <div class="armillary">
+      <div class="armillary-ring ring-1"></div>
+      <div class="armillary-ring ring-2"></div>
+      <div class="armillary-ring ring-3"></div>
+      <div class="armillary-ring ring-4"></div>
+      <div class="armillary-core"></div>
+      <div class="dna-strand" id="dnaStrand"></div>
+    </div>
+    <div class="hero-overline">Personalized Genomic Intelligence</div>
+    <h1 class="hero-title">Deep<span class="gold">Sky</span></h1>
+    <p class="hero-tagline">Every genome tells a different story. We read each one.</p>
+    <p class="hero-description">
+      DeepSky delivers variant effect prediction conditioned on each patient's unique genomic background —
+      replacing one-size-fits-all interpretation with true precision medicine.
+    </p>
+    <div class="hero-cta-group">
+      <a href="#platform" class="btn-primary">Explore the Platform ↓</a>
+      <a href="#contact" class="btn-secondary">Partner With Us</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══ CRISIS ═══ -->
+<section class="crisis" id="crisis">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">The Problem</div>
+      <h2 class="section-title">A $966 Billion Crisis<br>Hiding in Plain Sight</h2>
+      <p class="section-subtitle">
+        Clinical genomics interprets every patient's variants against a single reference genome —
+        assuming one variant has one effect, regardless of genetic background.
+      </p>
+    </div>
+    <div class="crisis-grid">
+      <div class="crisis-visual reveal reveal-delay-1">
+        <div class="crisis-number" id="crisisCounter">
+          <span class="outline">$966B</span>
+          <span class="filled">$966B</span>
+        </div>
+        <span class="crisis-unit">Annual rare disease burden</span>
+      </div>
+      <div class="crisis-text reveal reveal-delay-2">
+        <h3>The reference genome is a map of nowhere.</h3>
+        <p>
+          Today's variant interpretation tools compare mutations to a single consensus sequence —
+          a composite that represents no living individual. When a clinician asks "is this variant pathogenic?",
+          the answer depends entirely on which genome it appears in. Current tools cannot account for this.
+        </p>
+        <p>
+          The result: diagnostic odysseys averaging 5–7 years, millions of variants classified as
+          "uncertain significance," and a healthcare system flying blind at the molecular level.
+        </p>
+        <div class="stat-row">
+          <div class="stat-item">
+            <span class="stat-value" data-target="400" data-suffix="M+">0</span>
+            <span class="stat-label">Rare disease patients</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" data-target="5" data-suffix="–7 yrs">0</span>
+            <span class="stat-label">Avg. diagnostic odyssey</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" data-target="95" data-suffix="%">0</span>
+            <span class="stat-label">Multimodal variant effects</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line"></div>
+
+<!-- ═══ NARRATIVE — BABY KJ ═══ -->
+<section class="narrative" id="narrative">
+  <div class="section-inner">
+    <div class="narrative-content reveal">
+      <div class="narrative-quote">
+        Baby KJ was born with CPS1 deficiency — a devastating metabolic disorder. She received a personalized CRISPR therapy designed for her specific mutation. It required unprecedented coordination across multiple institutions and months of bespoke work.
+      </div>
+      <div class="narrative-attribution">The case that sparked DeepSky</div>
+    </div>
+    <div class="narrative-body reveal reveal-delay-1">
+      <p>
+        Baby KJ's story is a triumph of modern medicine — and a warning. The level of coordination required
+        to design her therapy <span class="narrative-emphasis">cannot scale</span>. For every Baby KJ who receives
+        personalized treatment, thousands of patients wait with variants that current tools classify as
+        "uncertain significance."
+      </p>
+      <p>
+        DeepSky was founded on a simple conviction: the technology to interpret every patient's genome in its
+        full context should not be a one-off miracle. It should be <span class="narrative-emphasis">infrastructure</span>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line"></div>
+
+<!-- ═══ PARADIGM SHIFT ═══ -->
+<section class="paradigm" id="paradigm">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center; max-width:700px; margin:0 auto;">
+      <div class="section-label" style="justify-content:center;">Our Approach</div>
+      <h2 class="section-title">From Encyclopedia<br>to Radiology</h2>
+      <p class="section-subtitle" style="margin:0 auto;">
+        We don't look up variants in a database. We compute their effect — fresh,
+        for every patient, every time.
+      </p>
+    </div>
+
+    <div class="paradigm-comparison">
+      <div class="paradigm-card old reveal reveal-delay-1">
+        <div class="paradigm-icon">📖</div>
+        <h3>The Encyclopedia Model</h3>
+        <div class="model-name">Current standard of care</div>
+        <p>
+          Pre-computed variant classifications stored in databases. One answer per variant,
+          applied uniformly to all patients regardless of their genomic context.
+        </p>
+        <ul class="paradigm-features">
+          <li><span class="icon">✕</span> Single reference genome baseline</li>
+          <li><span class="icon">✕</span> Static, pre-computed classifications</li>
+          <li><span class="icon">✕</span> Ignores epistatic interactions</li>
+          <li><span class="icon">✕</span> Cannot resolve VUS at patient level</li>
+        </ul>
+      </div>
+
+      <div class="paradigm-divider reveal"><span>versus</span></div>
+
+      <div class="paradigm-card new reveal reveal-delay-2">
+        <div class="paradigm-icon">🔭</div>
+        <h3>The Radiology Model</h3>
+        <div class="model-name">The DeepSky approach</div>
+        <p>
+          Fresh computation per patient. Variant effects are predicted in the context
+          of each individual's complete genomic background — like reading an X-ray, not a textbook.
+        </p>
+        <ul class="paradigm-features">
+          <li><span class="icon">✦</span> Full patient genome as context</li>
+          <li><span class="icon">✦</span> Dynamic, per-patient computation</li>
+          <li><span class="icon">✦</span> Captures epistatic modulation</li>
+          <li><span class="icon">✦</span> Resolves VUS with personal context</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SCIENCE ═══ -->
+<section class="science" id="science">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">The Science</div>
+      <h2 class="section-title">Multimodal Effects Are the Rule,<br>Not the Exception</h2>
+      <p class="section-subtitle">
+        Our research demonstrates that variant effects are not fixed properties — they shift
+        dramatically across genomic backgrounds.
+      </p>
+    </div>
+
+    <div class="science-highlight">
+      <div class="science-card reveal reveal-delay-1">
+        <div class="science-card-number"><span class="counter" data-target="95">0</span><span class="suffix">%</span></div>
+        <h3>Multimodal Variant Effects</h3>
+        <p>
+          Of clinically relevant variants exhibit different functional consequences across
+          different genomic backgrounds — challenging the "one variant, one effect" assumption.
+        </p>
+      </div>
+      <div class="science-card reveal reveal-delay-2">
+        <div class="science-card-number">10<span class="suffix">×</span></div>
+        <h3>Improved Resolution</h3>
+        <p>
+          Context-aware models resolve variant effects at an order of magnitude higher
+          precision than reference-only approaches, unlocking actionable insights from ambiguous data.
+        </p>
+      </div>
+      <div class="science-card reveal reveal-delay-3">
+        <div class="science-card-number">1<span class="suffix">:</span>1</div>
+        <h3>True Personalization</h3>
+        <p>
+          Every prediction is computed against the individual patient's haplotype —
+          not averaged, not interpolated, not looked up. Unique input, unique output.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line"></div>
+
+<!-- ═══ PLATFORM ═══ -->
+<section class="platform" id="platform">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">The Platform</div>
+      <h2 class="section-title">How DeepSky Works</h2>
+      <p class="section-subtitle">
+        A computational engine that predicts variant effects conditioned on each patient's
+        full genomic context.
+      </p>
+    </div>
+
+    <div class="platform-flow">
+      <div class="platform-step reveal reveal-delay-1">
+        <div class="step-marker"><div class="step-number">01</div></div>
+        <div class="step-content">
+          <h3>Ingest Patient Genome</h3>
+          <p>
+            Whole-genome or targeted sequencing data is ingested alongside the patient's
+            complete haplotype context, capturing the full landscape of cis and trans interactions.
+          </p>
+          <span class="step-tag">Input Layer</span>
+        </div>
+      </div>
+      <div class="platform-step reveal reveal-delay-2">
+        <div class="step-marker"><div class="step-number">02</div></div>
+        <div class="step-content">
+          <h3>Context-Conditioned Prediction</h3>
+          <p>
+            Our AI models evaluate each variant of interest against the patient's genomic background,
+            computing functional effects that account for epistatic interactions, regulatory context,
+            and haplotype-specific modulation.
+          </p>
+          <span class="step-tag">Computation Engine</span>
+        </div>
+      </div>
+      <div class="platform-step reveal reveal-delay-3">
+        <div class="step-marker"><div class="step-number">03</div></div>
+        <div class="step-content">
+          <h3>Population-Level Mapping</h3>
+          <p>
+            Variant response profiles are computed across patient cohorts, generating population-level
+            maps of how specific variants behave across diverse genomic backgrounds.
+          </p>
+          <span class="step-tag">Stratification Layer</span>
+        </div>
+      </div>
+      <div class="platform-step reveal reveal-delay-4">
+        <div class="step-marker"><div class="step-number">04</div></div>
+        <div class="step-content">
+          <h3>Deliver Actionable Intelligence</h3>
+          <p>
+            Clinicians and pharma partners receive personalized variant classifications,
+            patient stratification insights, and therapeutic response predictions — all
+            contextualized to individual genomic backgrounds.
+          </p>
+          <span class="step-tag">Output Layer</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MARKET ═══ -->
+<section class="market" id="market">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">Market Opportunity</div>
+      <h2 class="section-title">The Orphan Drug Gold Rush<br>Needs Better Maps</h2>
+      <p class="section-subtitle">
+        The rare and orphan disease market is one of the fastest-growing segments in pharma.
+        Yet the genomic infrastructure supporting it remains stuck in the reference era.
+      </p>
+    </div>
+
+    <div class="market-grid">
+      <div class="market-metric reveal reveal-delay-1" style="--fill-width: 82%;">
+        <div class="market-metric-value">$280B</div>
+        <div class="market-metric-label">Global Orphan Drug Market (2024)</div>
+        <div class="market-metric-desc">
+          The orphan drug market has surpassed $280 billion globally,
+          with a compound annual growth rate of 10.4%.
+        </div>
+        <div class="market-bar"><div class="market-bar-fill"></div></div>
+      </div>
+      <div class="market-metric reveal reveal-delay-2" style="--fill-width: 65%;">
+        <div class="market-metric-value">10.4%</div>
+        <div class="market-metric-label">CAGR — Accelerating Growth</div>
+        <div class="market-metric-desc">
+          Orphan drugs now comprise over half of all new FDA approvals,
+          with nucleic acid therapeutics driving the next wave.
+        </div>
+        <div class="market-bar"><div class="market-bar-fill"></div></div>
+      </div>
+      <div class="market-metric reveal reveal-delay-3" style="--fill-width: 45%;">
+        <div class="market-metric-value">50+</div>
+        <div class="market-metric-label">Nucleic Acid Therapeutics in Late Stage</div>
+        <div class="market-metric-desc">
+          ASOs, siRNAs, gene therapies, and CRISPR-based treatments
+          all require precise variant-level patient stratification.
+        </div>
+        <div class="market-bar"><div class="market-bar-fill"></div></div>
+      </div>
+      <div class="market-metric reveal reveal-delay-4" style="--fill-width: 90%;">
+        <div class="market-metric-value">0</div>
+        <div class="market-metric-label">Personalized VEP Solutions at Scale</div>
+        <div class="market-metric-desc">
+          No existing platform computes variant effects conditioned on individual patient genomes.
+          DeepSky is building the infrastructure the field needs.
+        </div>
+        <div class="market-bar"><div class="market-bar-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line"></div>
+
+<!-- ═══ STAKEHOLDERS ═══ -->
+<section class="stakeholders" id="stakeholders">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">Who We Serve</div>
+      <h2 class="section-title">Built for the Entire<br>Precision Medicine Ecosystem</h2>
+    </div>
+
+    <div class="stakeholder-tabs reveal">
+      <button class="stakeholder-tab active" data-panel="pharma">Pharmaceutical Partners</button>
+      <button class="stakeholder-tab" data-panel="clinical">Clinical Geneticists</button>
+      <button class="stakeholder-tab" data-panel="patients">Patients & Families</button>
+    </div>
+
+    <div class="stakeholder-panels">
+      <div class="stakeholder-panel active" id="panel-pharma">
+        <div class="panel-text">
+          <h3>Predict Who Will Respond — Before Dosing</h3>
+          <p>
+            For companies developing nucleic acid therapeutics, DeepSky provides
+            population-level variant response mapping to stratify patients
+            by predicted therapeutic response.
+          </p>
+          <ul class="panel-benefits">
+            <li>Identify responders based on genomic context, not just variant identity</li>
+            <li>De-risk clinical trials with pre-enrollment genomic stratification</li>
+            <li>Expand label indications by discovering new responsive sub-populations</li>
+            <li>Reduce adverse events through background-aware predictions</li>
+          </ul>
+        </div>
+        <div class="panel-visual">
+          <div class="panel-logo-row">
+            <div class="panel-logo-item">ASO Developers</div>
+            <div class="panel-logo-item">siRNA Platforms</div>
+            <div class="panel-logo-item">Gene Therapy</div>
+            <div class="panel-logo-item">CRISPR Therapeutics</div>
+            <div class="panel-logo-item">mRNA Programs</div>
+            <div class="panel-logo-item">Pharmacogenomics</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stakeholder-panel" id="panel-clinical">
+        <div class="panel-text">
+          <h3>Resolve the Unresolvable</h3>
+          <p>
+            For clinical geneticists navigating the diagnostic odyssey, DeepSky
+            transforms variant interpretation by adding the missing dimension:
+            the patient's own genome.
+          </p>
+          <ul class="panel-benefits">
+            <li>Reclassify variants of uncertain significance with patient-specific evidence</li>
+            <li>Reduce diagnostic turnaround from years to weeks</li>
+            <li>Provide families with actionable genomic insights, not ambiguity</li>
+            <li>Integrate seamlessly with existing clinical sequencing workflows</li>
+          </ul>
+        </div>
+        <div class="panel-visual">
+          <div class="panel-logo-row">
+            <div class="panel-logo-item">Rare Disease Centers</div>
+            <div class="panel-logo-item">Academic Medical Centers</div>
+            <div class="panel-logo-item">Genetic Counselors</div>
+            <div class="panel-logo-item">Diagnostic Labs</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stakeholder-panel" id="panel-patients">
+        <div class="panel-text">
+          <h3>Ending the Diagnostic Odyssey</h3>
+          <p>
+            For the 400 million people worldwide living with a rare disease,
+            DeepSky's vision is a world where no patient waits years for an answer
+            that their genome could provide today.
+          </p>
+          <ul class="panel-benefits">
+            <li>Faster diagnoses through personalized genomic interpretation</li>
+            <li>Better treatment matching based on individual genomic context</li>
+            <li>Hope for the "unsolved" — variants that current tools cannot classify</li>
+            <li>A future where precision medicine is truly personal</li>
+          </ul>
+        </div>
+        <div class="panel-visual">
+          <div class="panel-logo-row">
+            <div class="panel-logo-item">Rare Disease Advocacy</div>
+            <div class="panel-logo-item">Patient Registries</div>
+            <div class="panel-logo-item">Family Foundations</div>
+            <div class="panel-logo-item">Undiagnosed Programs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ORIGIN ═══ -->
+<section class="origin" id="origin">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">Our Origin</div>
+      <h2 class="section-title">Born at the Birthplace<br>of Genomics</h2>
+    </div>
+
+    <div class="origin-content">
+      <div class="origin-text reveal reveal-delay-1">
+        <p>
+          DeepSky emerged from the Koo Lab at Cold Spring Harbor Laboratory — the institution where
+          the foundations of modern genetics were laid. Our research at the intersection of deep learning
+          and functional genomics revealed a truth the field had been overlooking: variant effects are
+          not fixed properties, but dynamic phenomena shaped by the genome they inhabit.
+        </p>
+        <p>
+          This isn't incremental improvement. It's a fundamental rethinking of how we interpret
+          genetic variation — replacing the static encyclopedia with a living, personalized computation
+          for every patient.
+        </p>
+      </div>
+
+      <div class="origin-badges reveal reveal-delay-2">
+        <div class="origin-badge">
+          <div class="badge-icon">🧬</div>
+          <div class="badge-text">
+            <h4>Cold Spring Harbor Laboratory</h4>
+            <p>World-renowned center for genomics research since the dawn of molecular biology.</p>
+          </div>
+        </div>
+        <div class="origin-badge">
+          <div class="badge-icon">🤖</div>
+          <div class="badge-text">
+            <h4>Koo Lab — Genomic AI</h4>
+            <p>Pioneering the application of deep learning to regulatory genomics and variant effect prediction.</p>
+          </div>
+        </div>
+        <div class="origin-badge">
+          <div class="badge-icon">📄</div>
+          <div class="badge-text">
+            <h4>Peer-Reviewed Research</h4>
+            <p>Built on published findings demonstrating multimodal variant effects across haplotype backgrounds.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT CTA ═══ -->
+<section class="contact" id="contact">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label" style="justify-content:center;">Connect</div>
+      <h2 class="section-title">Ready to Move Beyond<br>the Reference Genome?</h2>
+      <p class="section-subtitle">
+        Whether you're developing nucleic acid therapeutics, diagnosing rare disease,
+        or building the future of precision medicine — we'd love to talk.
+      </p>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <a href="mailto:contact@deepsky.bio" class="contact-email">contact@deepsky.bio</a>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <div class="hero-cta-group">
+        <a href="mailto:contact@deepsky.bio" class="btn-primary">Start a Conversation</a>
+        <a href="#hero" class="btn-secondary">Back to Top ↑</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="footer-left">DEEPSKY © 2025</div>
+  <div class="footer-right">Personalized Genomic Intelligence · Cold Spring Harbor, NY</div>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════ -->
+<script>
+// ─── STARFIELD ───
+(function initStarfield() {
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  const STAR_COUNT = 200;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function createStars() {
+    stars = [];
+    for (let i = 0; i < STAR_COUNT; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.2 + 0.3,
+        alpha: Math.random() * 0.5 + 0.1,
+        drift: (Math.random() - 0.5) * 0.12,
+        twinkleSpeed: Math.random() * 0.006 + 0.002,
+        twinklePhase: Math.random() * Math.PI * 2,
+        isGold: Math.random() < 0.1
+      });
+    }
+  }
+
+  function draw(time) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of stars) {
+      const twinkle = Math.sin(time * s.twinkleSpeed + s.twinklePhase) * 0.3 + 0.7;
+      ctx.globalAlpha = s.alpha * twinkle;
+      ctx.fillStyle = s.isGold ? '#c9a84c' : '#e8e4dc';
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+      s.y += s.drift;
+      if (s.y < -5) s.y = canvas.height + 5;
+      if (s.y > canvas.height + 5) s.y = -5;
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  createStars();
+  requestAnimationFrame(draw);
+  window.addEventListener('resize', () => { resize(); createStars(); });
+})();
+
+// ─── DNA DOTS ───
+(function initDNA() {
+  const strand = document.getElementById('dnaStrand');
+  const dotCount = 24;
+  for (let i = 0; i < dotCount; i++) {
+    const dot = document.createElement('div');
+    dot.classList.add('dna-dot');
+    const t = i / dotCount;
+    const y = t * 200;
+    const x = Math.sin(t * Math.PI * 3) * 22 + 28;
+    dot.style.left = x + 'px';
+    dot.style.top = y + 'px';
+    dot.style.animation = `dnaFloat ${2 + Math.random() * 2}s ease-in-out ${t * 2}s infinite`;
+    dot.style.opacity = 0.3 + Math.abs(Math.sin(t * Math.PI * 3)) * 0.5;
+    strand.appendChild(dot);
+  }
+})();
+
+// ─── NAV SCROLL ───
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// ─── MOBILE NAV ───
+document.getElementById('mobileToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+
+// ─── REVEAL ON SCROLL ───
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal, .market-metric').forEach(el => revealObserver.observe(el));
+
+// ─── COUNTER ANIMATION ───
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = parseInt(el.getAttribute('data-target'));
+      const suffix = el.getAttribute('data-suffix') || '';
+      const duration = 1800;
+      const start = performance.now();
+
+      function update(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(eased * target);
+        el.textContent = current + suffix;
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+      counterObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-value, .counter').forEach(el => counterObserver.observe(el));
+
+// ─── CRISIS NUMBER ANIMATION ───
+const crisisObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('animate');
+      crisisObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+const crisisCounter = document.getElementById('crisisCounter');
+if (crisisCounter) crisisObserver.observe(crisisCounter);
+
+// ─── STAKEHOLDER TABS ───
+document.querySelectorAll('.stakeholder-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.stakeholder-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.stakeholder-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+  });
+});
+
+// ─── SMOOTH SCROLL POLYFILL FOR OLDER SAFARI ───
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
