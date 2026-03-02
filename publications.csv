@@ -1,0 +1,13 @@
+title,authors,journal,year,type,url
+"Decoding the regulatory genome with large-scale deep learning","Koo PK","Nature Reviews Genetics","2025","Journal Club","https://doi.org/10.1038/s41576-025-00914-2"
+"Current approaches to genomic deep learning struggle to fully capture human genetic variation","Tang Z, Toneyan S, Koo PK","Nature Genetics","2023","Perspective","https://doi.org/10.1038/s41588-023-01559-9"
+"Interpreting cis-regulatory mechanisms from genomic deep neural networks using surrogate models","Seitz EE, McCandlish DM, Kinney JB, Koo PK","Nature Machine Intelligence","2024","Article","https://doi.org/10.1038/s42256-024-00851-5"
+"Interpreting cis-regulatory interactions from large-scale deep neural networks for genomics","Toneyan S, Koo PK","Nature Genetics","2024","Article","https://doi.org/10.1038/s41588-024-01923-3"
+"EvoAug: Improving generalization and interpretability of genomic deep neural networks with evolution-inspired data augmentations","Lee NK, Toneyan S, Tang Z, Koo PK","Genome Biology","2023","Article","https://doi.org/10.1186/s13059-023-02941-w"
+"Uncertainty-aware genomic deep learning with knowledge distillation","Zhou JL, Rizzo K, Tang Z, Koo PK","bioRxiv","2024","Preprint","https://doi.org/10.1101/2024.11.13.623486"
+"Evaluating the representational power of pre-trained DNA language models for regulatory genomics","Tang Z, Somia N, Kang Y, Koo PK","bioRxiv","2024","Preprint","https://doi.org/10.1101/2024.02.29.582810"
+"echolocatoR: An automated end-to-end statistical and functional genomic fine-mapping pipeline","Schilder BM, Humphrey J, Raj T","Bioinformatics","2022","Article","https://doi.org/10.1093/bioinformatics/btab658"
+"Fine-mapping of Parkinson's disease susceptibility loci identifies putative causal variants","Schilder BM, Raj T","Human Molecular Genetics","2021","Article","https://doi.org/10.1093/hmg/ddab294"
+"Correcting gradient-based interpretations of deep neural networks for genomics","Majdandzic A, Rajesh C, Koo PK","Genome Biology","2023","Article","https://doi.org/10.1186/s13059-023-02956-3"
+"Improving representations of genomic sequence motifs in convolutional networks with exponential activations","Koo PK, Ploenzke M","Nature Machine Intelligence","2021","Article","https://doi.org/10.1038/s42256-020-00291-x"
+"Genetic analysis of the human microglial transcriptome across brain regions, aging and disease pathologies","de Paiva Lopes K, Snijders GJL, Humphrey J, Allan A, Sneeboer M, Navarro E, Schilder BM, et al.","Nature Genetics","2022","Article","https://doi.org/10.1038/s41588-021-00976-y"
