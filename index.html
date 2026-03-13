@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DeepSky — AI for Precision Medicine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════
    DEEPSKY CONFIG — Edit these to restyle the entire site
    ═══════════════════════════════════════════════════════ */
 :root {
   /* FONTS */
-  --font-display: 'Rajdhani', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
   --font-body:    'Outfit', sans-serif;
   --font-mono:    'JetBrains Mono', monospace;
   /* FONT SIZES */
@@ -20,11 +20,11 @@
   --fs-h2:      clamp(2.5rem, 4.8vw, 3.5rem);
   --fs-h3:      1.75rem;
   --fs-h4:      1.3rem;
-  --fs-body-lg: 1.38rem;
-  --fs-body:    1.22rem;
-  --fs-body-sm: 1.12rem;
-  --fs-small:   1.0rem;
-  --fs-xs:      0.74rem;
+  --fs-body-lg: 1.5rem;
+  --fs-body:    1.35rem;
+  --fs-body-sm: 1.22rem;
+  --fs-small:   1.1rem;
+  --fs-xs:      0.82rem;
   --fs-nav:     0.78rem;
   /* PALETTE */
   --c-void:       #050811;
@@ -76,10 +76,11 @@ nav.scrolled{background:rgba(5,8,17,.94);backdrop-filter:blur(25px);border-botto
 .fr.a{width:300px;height:300px;margin:-150px 0 0 -150px;border-width:7px;border-color:var(--c-brass);box-shadow:0 0 12px rgba(201,168,76,.35),inset 0 0 12px rgba(201,168,76,.12)}
 .fr.b{width:255px;height:255px;margin:-127px 0 0 -127px;border-width:6px;border-color:var(--c-brass-lo);box-shadow:0 0 8px rgba(139,105,20,.4),inset 0 0 8px rgba(139,105,20,.15)}
 .fr.c{width:335px;height:335px;margin:-167px 0 0 -167px;border-width:5px;border-color:rgba(201,168,76,.5);box-shadow:0 0 14px rgba(201,168,76,.18)}
-.fr.d{width:215px;height:215px;margin:-107px 0 0 -107px;border-width:9px;border-color:var(--c-brass-hi);box-shadow:0 0 18px rgba(232,212,139,.3),inset 0 0 12px rgba(232,212,139,.1)}
+.fr.d{width:215px;height:290px;margin:-145px 0 0 -107px;border-width:9px;border-color:var(--c-brass-hi);box-shadow:0 0 18px rgba(232,212,139,.3),inset 0 0 12px rgba(232,212,139,.1);border-radius:50%}
 .fr.e{width:275px;height:275px;margin:-137px 0 0 -137px;border-width:4px;border-color:rgba(184,146,58,.4);box-shadow:0 0 8px rgba(201,168,76,.12)}
 .dna-axis{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:65px;height:220px;z-index:5}
-.dna-n{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--c-brass-hi);box-shadow:0 0 5px var(--c-brass)}
+.dna-n{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--c-brass-hi);box-shadow:0 0 5px var(--c-brass);transition:box-shadow .15s,background .15s}
+.dna-n.glow{background:#fff;box-shadow:0 0 8px 3px var(--c-gold),0 0 16px 6px rgba(255,215,0,.4)}
 .dna-b{position:absolute;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.35),transparent)}
 .star{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(255,252,240,.95) 8%,rgba(255,240,200,.6) 20%,rgba(255,215,0,.18) 45%,transparent 70%);box-shadow:0 0 10px rgba(255,250,235,.5),0 0 25px rgba(255,235,180,.2);z-index:12}
 .star .rays{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:160px;height:6px;background:linear-gradient(90deg,transparent 0%,rgba(255,250,240,.02) 15%,rgba(255,245,220,.12) 35%,rgba(255,252,245,.25) 48%,rgba(255,252,245,.25) 52%,rgba(255,245,220,.12) 65%,rgba(255,250,240,.02) 85%,transparent 100%);border-radius:50%}
@@ -111,6 +112,7 @@ section{position:relative;z-index:1;padding:110px 24px}
 .stat-v{font-family:var(--font-display);font-size:2.8rem;font-weight:700;color:var(--c-brass-hi);line-height:1;margin-bottom:6px}
 .stat-v span{font-size:1.5rem;color:var(--c-brass)}
 .stat-d{font-size:var(--fs-body-sm);color:var(--c-cream-dim);margin-top:6px;line-height:1.6}
+.stat-d a:hover,.case-story a:hover,.sec-t a:hover{color:var(--c-brass-hi)!important;text-decoration-color:var(--c-brass-hi)!important}
 .prob-text{max-width:740px;margin:0 auto;font-size:var(--fs-body-lg);line-height:2;text-align:center}
 .prob-text strong{color:var(--c-brass-hi);font-weight:600}
 .img-panel,.scene-panel{width:100%;height:420px;margin:50px 0;position:relative;overflow:hidden;border:1px solid rgba(201,168,76,.08);background:var(--c-void)}
@@ -214,7 +216,7 @@ footer p{font-family:var(--font-mono);font-size:.6rem;color:var(--c-cream-faint)
   .fr.a{width:225px!important;height:225px!important;margin:-112px 0 0 -112px!important}
   .fr.b{width:192px!important;height:192px!important;margin:-96px 0 0 -96px!important}
   .fr.c{width:250px!important;height:250px!important;margin:-125px 0 0 -125px!important}
-  .fr.d{width:162px!important;height:162px!important;margin:-81px 0 0 -81px!important}
+  .fr.d{width:162px!important;height:218px!important;margin:-109px 0 0 -81px!important}
   .fr.e{width:208px!important;height:208px!important;margin:-104px 0 0 -104px!important}
   .dna-axis{height:165px!important;width:50px!important}
   .stats{grid-template-columns:1fr;gap:14px}.an-grid{grid-template-columns:1fr}
@@ -253,12 +255,12 @@ footer p{font-family:var(--font-mono);font-size:.6rem;color:var(--c-cream-faint)
 
 <section id="problem"><div class="inner reveal">
   <div class="sec-lbl">The Challenge</div>
-  <h2 class="sec-t">A $966 Billion <em>Interpretation Crisis</em></h2>
+  <h2 class="sec-t">A <a href="https://everylifefoundation.org/burden-study/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-decoration-color:var(--c-brass-mid);text-underline-offset:4px">$966 Billion</a> <em>Interpretation Crisis</em></h2>
   <div class="deco"><span class="bar"></span><span class="gem s"></span><span class="gem"></span><span class="gem s"></span><span class="bar"></span></div>
   <div class="stats">
-    <div class="stat reveal rd1"><div class="stat-v">300<span>M+</span></div><div class="stat-d">People worldwide living with a rare disease</div></div>
+    <div class="stat reveal rd1"><div class="stat-v">300<span>M+</span></div><div class="stat-d"><a href="https://globalgenes.org/rare-disease-facts/" target="_blank" rel="noopener" style="color:var(--c-cream-dim);text-decoration:underline;text-decoration-color:var(--c-brass-mid);text-underline-offset:3px">People worldwide living with a rare disease</a></div></div>
     <div class="stat reveal rd2"><div class="stat-v">95<span>%</span></div><div class="stat-d">Of clinical variants show context-dependent effects across genomic backgrounds</div></div>
-    <div class="stat reveal rd3"><div class="stat-v">50<span>%</span></div><div class="stat-d">Of rare disease patients still lack a definitive genetic diagnosis</div></div>
+    <div class="stat reveal rd3"><div class="stat-v">50<span>%</span></div><div class="stat-d"><a href="https://www.nature.com/articles/s41588-018-0160-5" target="_blank" rel="noopener" style="color:var(--c-cream-dim);text-decoration:underline;text-decoration-color:var(--c-brass-mid);text-underline-offset:3px">Of rare disease patients still lack a definitive genetic diagnosis</a></div></div>
   </div>
   <div class="scene-panel" id="scene-dna"><canvas id="c-dna"></canvas><span class="interact-hint">double-click to interact</span><span class="cap">Double helix &mdash; the language of life</span></div>
   <p class="prob-text">Today's clinical genomics compares every patient's variants against <strong>a single reference genome</strong>. But our research shows that the same variant can have dramatically different effects depending on the patient's unique genomic context &mdash; like using a dictionary to edit a novel. It catches typos, but <strong>misses whether the sentence actually makes sense</strong>.</p>
@@ -308,7 +310,7 @@ footer p{font-family:var(--font-mono);font-size:.6rem;color:var(--c-cream-faint)
   <div class="deco"><span class="bar"></span><span class="gem s"></span><span class="gem"></span><span class="gem s"></span><span class="bar"></span></div>
   <div class="scene-panel" id="scene-heart"><canvas id="c-heart"></canvas><span class="interact-hint">double-click to interact</span><span class="cap">Precision medicine &mdash; where technology meets compassion</span></div>
   <div class="case-grid" style="margin-top:40px">
-    <div class="case-story"><h3>One infant. One rare mutation.<br>A <em>personalized</em> CRISPR therapy.</h3><p>KJ Muldoon was born with CPS1 deficiency &mdash; affecting ~1 in 1.3 million people. About 50% of infants with the severe form die in the first week of life.</p><p>A team at CHOP and Penn Medicine designed a bespoke CRISPR base-editing therapy in just six months. KJ received his first dose in February 2025 and has since shown remarkable improvement.</p><p class="case-pull">This level of personalization cannot scale with today's tools. That's the problem DeepSky solves.</p><p>Our AI platform automates the personalized genomic intelligence that made KJ's therapy possible &mdash; for every patient, not just the fortunate few.</p></div>
+    <div class="case-story"><h3>One infant. One rare mutation.<br>A <em>personalized</em> CRISPR therapy.</h3><p>KJ Muldoon was born with <a href="https://doi.org/10.1056/NEJMoa2504747" target="_blank" rel="noopener" style="color:var(--c-cream-dim);text-decoration:underline;text-decoration-color:var(--c-brass-mid);text-underline-offset:3px">CPS1 deficiency</a> &mdash; affecting ~1 in 1.3 million people. About 50% of infants with the severe form die in the first week of life.</p><p>A team at <a href="https://www.chop.edu/news/chop-penn-medicine-team-treats-infant-first-its-kind-personalized-gene-editing-therapy" target="_blank" rel="noopener" style="color:var(--c-cream-dim);text-decoration:underline;text-decoration-color:var(--c-brass-mid);text-underline-offset:3px">CHOP and Penn Medicine</a> designed a bespoke CRISPR base-editing therapy in just six months. KJ received his first dose in February 2025 and has since shown remarkable improvement.</p><p class="case-pull">This level of personalization cannot scale with today's tools. That's the problem DeepSky solves.</p><p>Our AI platform automates the personalized genomic intelligence that made KJ's therapy possible &mdash; for every patient, not just the fortunate few.</p></div>
     <div class="case-visual"><div class="case-tl"><div class="tl-s"><div class="tl-t">Day 2 &mdash; Diagnosis</div><p>Ammonia exceeds 1,000 &micro;mol/L. Severe CPS1 deficiency confirmed at CHOP.</p></div><div class="tl-s"><div class="tl-t">Months 1-6 &mdash; Sprint</div><p>Bespoke CRISPR base-editing therapy designed, manufactured, and FDA-cleared in six months.</p></div><div class="tl-s"><div class="tl-t">Month 7 &mdash; Treatment</div><p>KJ receives first infusion of personalized gene therapy. He sleeps through the procedure.</p></div><div class="tl-s"><div class="tl-t">Month 10 &mdash; Going Home</div><p>After 307 days at CHOP, KJ is discharged &mdash; tolerating protein, reducing meds, hitting milestones.</p></div><div class="tl-s"><div class="tl-t">The Challenge Ahead</div><p>"If we only treat one patient, then we failed." DeepSky makes personalized genomic analysis scalable.</p></div></div></div>
   </div>
 </div></section>
@@ -335,7 +337,7 @@ footer p{font-family:var(--font-mono);font-size:.6rem;color:var(--c-cream-faint)
           <circle cx="55" cy="55" r="55" fill="url(#g1)"/>
           <text x="55" y="62" text-anchor="middle" fill="#050811" font-family="Rajdhani,sans-serif" font-size="36" font-weight="700">BS</text>
         </svg>
-        <img src="https://bschilder.github.io/BMSchilder/photos/Imperial_headshot_bright.jpg" alt="Brian Schilder">
+        <img src="images/brian_schilder.jpg" alt="Brian Schilder">
       </div>
       <h4>Brian Schilder, PhD</h4>
       <div class="role">Founder &amp; CEO</div>
@@ -350,7 +352,7 @@ footer p{font-family:var(--font-mono);font-size:.6rem;color:var(--c-cream-faint)
           <circle cx="55" cy="55" r="55" fill="url(#g2)"/>
           <text x="55" y="62" text-anchor="middle" fill="#050811" font-family="Rajdhani,sans-serif" font-size="36" font-weight="700">PK</text>
         </svg>
-        <img src="https://koolab.cshl.edu/images/people/peter_koo_profile.png" alt="Peter Koo">
+        <img src="images/peter_koo.png" alt="Peter Koo">
       </div>
       <h4>Peter Koo, PhD</h4>
       <div class="role">Scientific Advisor</div>
@@ -387,7 +389,7 @@ footer p{font-family:var(--font-mono);font-size:.6rem;color:var(--c-cream-faint)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 /* ═══ EMAIL (constructed via JS to avoid proxy mangling) ═══ */
-(function(){var a=document.getElementById("contactEmail");var e=["contact","deepsky.bio"].join("@");a.href="mail"+"to:"+e;a.textContent=e})();
+(function(){var a=document.getElementById("contactEmail");var e=["connect","deepsky.bio"].join("@");a.href="mail"+"to:"+e;a.textContent=e})();
 
 /* ═══════════════════════════════════════════════════════════
    THREE.JS METALLIC 3D SCENES
@@ -920,15 +922,18 @@ function parseCSV(text){
 
 /* ═══ PUBLICATIONS ═══ */
 var PUB_FALLBACK=[
+  {title:"Cell type-specific contextualisation of the human phenome: towards the systematic treatment of all rare diseases",authors:"Schilder BM, Murphy KB, Dash H, Zhang Y, Gordon-Smith R, Chapman J, Otani M, Skene NG",journal:"medRxiv",year:"2025",type:"Preprint",url:"https://doi.org/10.1101/2023.02.13.23285820"},
   {title:"Decoding the regulatory genome with large-scale deep learning",authors:"Koo PK",journal:"Nature Reviews Genetics",year:"2025",type:"Journal Club",url:"https://doi.org/10.1038/s41576-025-00914-2"},
-  {title:"Current approaches to genomic deep learning struggle to fully capture human genetic variation",authors:"Tang Z, Toneyan S, Koo PK",journal:"Nature Genetics",year:"2023",type:"Perspective",url:"https://doi.org/10.1038/s41588-023-01559-9"},
+  {title:"CUT&Tag recovers up to half of ENCODE ChIP-seq histone acetylation peaks",authors:"Abbasova L, Urbanaviciute P, Hu D, Ismail JN, Schilder BM, Nott A, Skene NG, Marzi SJ",journal:"Nature Communications",year:"2025",type:"Article",url:"https://doi.org/10.1038/s41467-025-58137-2"},
   {title:"Interpreting cis-regulatory mechanisms from genomic deep neural networks using surrogate models",authors:"Seitz EE, McCandlish DM, Kinney JB, Koo PK",journal:"Nature Machine Intelligence",year:"2024",type:"Article",url:"https://doi.org/10.1038/s42256-024-00851-5"},
   {title:"Interpreting cis-regulatory interactions from large-scale deep neural networks for genomics",authors:"Toneyan S, Koo PK",journal:"Nature Genetics",year:"2024",type:"Article",url:"https://doi.org/10.1038/s41588-024-01923-3"},
   {title:"EvoAug: Improving generalization and interpretability of genomic deep neural networks with evolution-inspired data augmentations",authors:"Lee NK, Toneyan S, Tang Z, Koo PK",journal:"Genome Biology",year:"2023",type:"Article",url:"https://doi.org/10.1186/s13059-023-02941-w"},
   {title:"Uncertainty-aware genomic deep learning with knowledge distillation",authors:"Zhou JL, Rizzo K, Tang Z, Koo PK",journal:"bioRxiv",year:"2024",type:"Preprint",url:"https://doi.org/10.1101/2024.11.13.623486"},
   {title:"Evaluating the representational power of pre-trained DNA language models for regulatory genomics",authors:"Tang Z, Somia N, Kang Y, Koo PK",journal:"bioRxiv",year:"2024",type:"Preprint",url:"https://doi.org/10.1101/2024.02.29.582810"},
   {title:"echolocatoR: An automated end-to-end statistical and functional genomic fine-mapping pipeline",authors:"Schilder BM, Humphrey J, Raj T",journal:"Bioinformatics",year:"2022",type:"Article",url:"https://doi.org/10.1093/bioinformatics/btab658"},
+  {title:"MungeSumstats: a Bioconductor package for the standardization and quality control of many GWAS summary statistics",authors:"Murphy AE, Schilder BM, Skene NG",journal:"Bioinformatics",year:"2021",type:"Article",url:"https://doi.org/10.1093/bioinformatics/btab665"},
   {title:"Fine-mapping of Parkinson's disease susceptibility loci identifies putative causal variants",authors:"Schilder BM, Raj T",journal:"Human Molecular Genetics",year:"2021",type:"Article",url:"https://doi.org/10.1093/hmg/ddab294"},
+  {title:"Geneshot: search engine for ranking genes from arbitrary text queries",authors:"Lachmann A, Schilder BM, Wojciechowicz ML, Torre D, Kuleshov MV, Keenan AB, Ma'ayan A",journal:"Nucleic Acids Research",year:"2019",type:"Article",url:"https://doi.org/10.1093/nar/gkz393"},
   {title:"Correcting gradient-based interpretations of deep neural networks for genomics",authors:"Majdandzic A, Rajesh C, Koo PK",journal:"Genome Biology",year:"2023",type:"Article",url:"https://doi.org/10.1186/s13059-023-02956-3"},
   {title:"Improving representations of genomic sequence motifs in convolutional networks with exponential activations",authors:"Koo PK, Ploenzke M",journal:"Nature Machine Intelligence",year:"2021",type:"Article",url:"https://doi.org/10.1038/s42256-020-00291-x"},
   {title:"Genetic analysis of the human microglial transcriptome across brain regions, aging and disease pathologies",authors:"de Paiva Lopes K, Snijders GJL, Humphrey J, Allan A, Sneeboer M, Navarro E, Schilder BM, et al.",journal:"Nature Genetics",year:"2022",type:"Article",url:"https://doi.org/10.1038/s41588-021-00976-y"}
@@ -1109,6 +1114,7 @@ var revs=document.querySelectorAll(".reveal");for(var i=0;i<revs.length;i++){obs
   /* DNA helix */
   var dna=document.getElementById("dnaAxis");
   var dH=220,dW=65;
+  var dnaDots=[];
   for(var i=0;i<24;i++){
     var tt=i/24,y=tt*dH,ph=tt*Math.PI*3;
     var x1=dW/2+Math.sin(ph)*(dW/2-6),x2=dW/2-Math.sin(ph)*(dW/2-6);
@@ -1118,8 +1124,10 @@ var revs=document.querySelectorAll(".reveal");for(var i=0;i<revs.length;i++){obs
       var n=document.createElement("div");n.className="dna-n";
       n.style.cssText="left:"+pts[p][0]+"px;top:"+y+"px;opacity:"+(0.35+Math.abs(pts[p][1])*0.65)+";transform:scale("+(0.55+Math.abs(pts[p][1])*0.45)+")";
       dna.appendChild(n);
+      dnaDots.push(n);
     }
   }
+  var glowIdx=0,glowTimer=0,glowSpeed=0.12,hovDur=0;
   for(var i=0;i<10;i++){
     var tt=(i+0.5)/10,y=tt*dH,ph=tt*Math.PI*3;
     var x1=dW/2+Math.sin(ph)*(dW/2-6),x2=dW/2-Math.sin(ph)*(dW/2-6);
@@ -1171,6 +1179,27 @@ var revs=document.querySelectorAll(".reveal");for(var i=0;i<revs.length;i++){obs
     haloEl.style.width=hW+"px";haloEl.style.height=hH+"px";haloEl.style.opacity=0.4+(sI-1)*0.3;
     var en=Math.min(energy/36,1);
     for(var i=0;i<ringEls.length;i++){ringEls[i].style.filter="brightness("+(1+en*0.5)+")"}
+
+    /* Sequential DNA glow on hover — cycles and accelerates */
+    if(hov){
+      hovDur+=dt;
+      /* Speed increases: starts at 0.12s per dot, accelerates to 0.015s */
+      glowSpeed=Math.max(0.015,0.12-hovDur*0.02);
+      glowTimer+=dt;
+      if(glowTimer>=glowSpeed){
+        glowTimer=0;
+        var idx=glowIdx%dnaDots.length;
+        dnaDots[idx].classList.add("glow");
+        /* Trail length shrinks as speed increases */
+        var trailLen=Math.max(3,Math.round(8-hovDur*0.6));
+        var dimIdx=((glowIdx-trailLen)%dnaDots.length+dnaDots.length)%dnaDots.length;
+        dnaDots[dimIdx].classList.remove("glow");
+        glowIdx++;
+      }
+    }else if(hovDur>0){
+      hovDur=0;glowSpeed=0.12;glowTimer=0;glowIdx=0;
+      for(var gi=0;gi<dnaDots.length;gi++){dnaDots[gi].classList.remove("glow")}
+    }
 
     requestAnimationFrame(animate);
   }
